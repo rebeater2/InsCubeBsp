@@ -1,0 +1,79 @@
+﻿# this file is use for real time navigation. The format is defined as following:
+# 1. every comment begins with '#' and empty line with only a '\n' is allowed but not recommended
+# 2. the sequence of each parameter is stationary
+# 3. END OF CONFIG\n donates the end of this file
+# arw [deg/sqrt_Hz]
+0.112
+# vrw [m/s/sqrt_Hz]
+0.0025
+# accelerator bias [mGal]
+0 -0 -0
+# gyroscope bias [mGal]
+0 0 0
+# accelerator scale [ppm]
+0 0 0
+# gyroscope scale [ppm]
+0 0 0
+# accelerator bias std [mGal]
+3.6 3.6 3.6
+# gyroscope bias std [deg/h]
+1 1 1
+# accelerator scale std [ppm]
+300 300 300
+# gyroscope scale std [ppm]
+300 300 300
+# accelerator correspond time h
+2
+# gyroscopes correspond time h
+2
+# IMU rate
+125
+#align mode 0: Use given 1: Moving 2:Static
+1
+#Moving align,the threshold of velocity
+0.1
+# enable gnss (disable for debug indoor)
+0
+# gnss antenna level arm [m]
+0.1 0.3 0.2
+# gnss_std_scale
+1
+# NHC enable
+1
+# NHC std [m/s]
+0.01 0.01
+# ZUPT enable
+1
+# ZUPT std [m/s]
+0.01
+# ZUPTA enable
+1
+# ZUPTA std [deg]
+0.01
+#odometer enable
+1
+#odometer std [m/s]
+0.01
+# odometer scale
+1.29
+# odometer scale std
+0
+# wheel level arm [m]
+0.1 0.3 0.2
+# wheel install angle [deg]
+0 0 0
+# initial pos-std [m]
+1 1 1
+#initial velocity std
+1 1 1
+# initial attitude std [deg]
+5 5 5
+# output project enable
+0
+# output project position [m]
+3 4 1
+# output project attitude [deg]
+1 2 1
+# enable rts, this is invalid for real-time application
+0
+END OF CONFIG
