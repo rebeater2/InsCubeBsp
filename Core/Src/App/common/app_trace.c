@@ -7,30 +7,28 @@
 **/
 
 
-#include "trace.h"
-#include "../../Bsp/bsp.h"
+#include "app_trace.h"
+#include "bsp.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 
-static QueueHandle_t mutex;
+static SemaphoreHandle_t  mutex;
 
 int common_trace(const char *fmt, ...) {
 	char buffer[1024];
+    xSemaphoreTake(mutex,0xf);
 	va_list ap;
 	int retval;
 	va_start(ap, fmt);
 	retval = vsprintf(buffer, fmt, ap);
 	va_end(ap);
-
-//	xQueueGetMutexHolder(mutex);
 	dev_write(&uart1_dev, (uint8_t *)buffer,strlen(buffer));
-//	xQueueGetMutexHolderFromISR(mutex);
+    xSemaphoreGive(mutex);
 	return retval;
 }
 
 
-void trace_init(){
-	mutex = xQueueCreateMutex(queueQUEUE_TYPE_MUTEX );
-
+void common_trace_init(){
+	mutex = xSemaphoreCreateMutex();
 }

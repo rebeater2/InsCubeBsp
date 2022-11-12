@@ -25,15 +25,7 @@ FIL SDFile ALIGN_RAM_D1;       /* File object for SD */
 
 /* USER CODE BEGIN Variables */
 
-//#include "rtc"
-#include "../../Core/Src/Sensors/nmea.h"
-FIL IMUFile ALIGN_RAM_D1;
-FIL GNSSRawFile ALIGN_RAM_D1;
-FIL GNSSFile ALIGN_RAM_D1;
-FIL RsltFile ALIGN_RAM_D1;
-FIL VelFile ALIGN_RAM_D1;
-FIL EntFile ALIGN_RAM_D1;
-extern DateTime utc_time;
+
 /* USER CODE END Variables */
 
 void MX_FATFS_Init(void)
@@ -56,12 +48,12 @@ DWORD get_fattime(void)
   /* USER CODE BEGIN get_fattime */
   /* 不需要 RTC模块，GPS数据足够提供本地时间维持*/
   DWORD res = 0u;
-  res |= ((uint32_t)utc_time.year << 25u);
+/*  res |= ((uint32_t)utc_time.year << 25u);
   res |= ((uint32_t)(utc_time.mon) << 21u);
   res |= ((uint32_t)(utc_time.day) << 16u);
   res |= ((uint32_t)utc_time.hour << 11u);
   res |= ((uint32_t)utc_time.minute << 5u);
-  res |= ((uint32_t)(utc_time.second / 2u) << 0u);
+  res |= ((uint32_t)(utc_time.second / 2u) << 0u);*/
   return res;
   /* USER CODE END get_fattime */
 }

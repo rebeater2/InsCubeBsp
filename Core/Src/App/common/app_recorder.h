@@ -8,8 +8,9 @@
 
 #ifndef INSCUBEBSP_CORE_SRC_APP_COMMON_APP_RECORDER_H_
 #define INSCUBEBSP_CORE_SRC_APP_COMMON_APP_RECORDER_H_
-#
-#include "../../Bsp/bsp.h"
+
+#include "bsp.h"
+#include "imu_adis1646x.h"
 #define MAX_FILENAME_LEN 20
 #define RECORD_TYPE(type) #type
 
@@ -41,6 +42,20 @@ typedef struct {
   uint32_t buffer_size;
 
 } app_recorder_t;
+
+typedef enum{
+  RECORDER_TYPE_IMU = 0,
+  RECORDER_TYPE_GNSS = 1,
+}recorder_data_type_t;
+
+typedef struct {
+  recorder_data_type_t type;
+  system_time_t tm;
+  union {
+    imu_raw_adi_t imu;
+    /*other sensor data*/
+  };
+}recorder_data_t;
 
 app_recorder_t * app_recorder_create(const char *filename);
 app_recorder_error_t app_recorder_init(app_recorder_t *recorder);

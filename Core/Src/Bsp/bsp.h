@@ -18,15 +18,22 @@ typedef struct {
   uint32_t millisecond;
   uint32_t microsecond;
 } system_time_t;
-
+#define TM_TO_DOUBLE(tm)   ((double)(tm).millisecond*1e-3+(double)(tm).microsecond*1e-6)
 typedef enum {
   bsp_io_ok = 0,
   bsp_io_error,
   bsp_io_init_error,
   bsp_io_wd_error,                        /*write error*/
   bsp_io_rd_error,                        /*read error*/
-  bsp_io_not_supported,                    /*the function is NULL*/
+  bsp_io_not_supported,                   /*the function is NULL*/
 } bsp_io_error_t;                        /*Error code for bsp*/
+
+typedef enum{
+  bsp_os_ok = 0,
+  bsp_os_msg_timeout,
+  bsp_os_msg_full,
+}bsp_os_error_t;
+
 
 typedef enum {
   bsp_io_state_reset = 0,
@@ -59,7 +66,6 @@ typedef struct {
 
 void bsp_init();
 
-
 /**
  * write data to device
  * @param dev point to peripherals
@@ -87,6 +93,18 @@ typedef enum {
   gpio_up,
 } bsp_irq_type_t;
 
+typedef struct {
+  uint16_t gpio_pin;
+  bsp_device_t device_;
+  void (*callback)(void *);
+  void *parameter;
+}bsp_gpio_irq_desc_t;
+
+typedef struct{
+  uint8_t uart_rx_buffer[128];
+  bsp_device_t *uart_dev;
+}bsp_uart_irq_desc_t;
+
 void register_irq(bsp_irq_type_t type, void *callback);
 void register_gpio_irq(uint16_t gpio_pin, void *callback, void *parameter);
 void get_system_time(system_time_t *tm);
@@ -100,19 +118,29 @@ typedef struct {
   uint32_t stack_size;
   void *parameter;
   bsp_priority_t priority;
-  void * handle;
+  void *handle;
 } bsp_task_t;
+
+typedef struct {
+  QueueHandle_t queue;
+  size_t item_size;
+  uint32_t capacity;
+  uint8_t isr_send;
+  uint8_t isr_get;
+} bsp_msg_t;
 
 /*tasks*/
 void bsp_create_task(bsp_task_t *p);
 void bsp_suspend_task(bsp_task_t *p);
 void bsp_delete_task(bsp_task_t *p);
+void bsp_msg_init(bsp_msg_t *p);
+bsp_os_error_t bsp_msg_send(bsp_msg_t *p, void *item);
+bsp_os_error_t bsp_msg_get(bsp_msg_t *p, void *buffer, uint32_t max_delay);
 
 void bsp_cpu_timeinfo(char *buffer);
 
 /*queues*/
-void bsp_queue_push(bsp_message_queue_t queue,void * item);
-
+void bsp_queue_push(bsp_message_queue_t queue, void *item);
 
 /*available devices on this board  */
 extern bsp_device_t spi1_dev;

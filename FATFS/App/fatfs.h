@@ -28,7 +28,7 @@
 #include "sd_diskio.h" /* defines SD_Driver as external */
 
 /* USER CODE BEGIN Includes */
-#include "global_defines.h"
+#define ALIGN_RAM_D1 __attribute__((section (".ram_d1")))
 /* USER CODE END Includes */
 
 extern uint8_t retSD; /* Return value for SD */
@@ -39,12 +39,7 @@ extern FIL SDFile; /* File object for SD */
 void MX_FATFS_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-extern FIL IMUFile ALIGN_RAM_D1;
-extern FIL GNSSRawFile ALIGN_RAM_D1;
-extern FIL GNSSFile ALIGN_RAM_D1;
-extern FIL RsltFile ALIGN_RAM_D1;
-extern FIL VelFile ALIGN_RAM_D1 ;
-extern FIL EntFile ALIGN_RAM_D1 ;
+
 /* USER CODE END Prototypes */
 #ifdef __cplusplus
 }

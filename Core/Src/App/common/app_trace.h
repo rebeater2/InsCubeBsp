@@ -6,8 +6,8 @@
 * @version 1.0
 **/
 
-#ifndef INSCUBEBSP_CORE_SRC_APP_COMMON_TRACE_H_
-#define INSCUBEBSP_CORE_SRC_APP_COMMON_TRACE_H_
+#ifndef INSCUBEBSP_CORE_SRC_APP_COMMON_APP_TRACE_H_
+#define INSCUBEBSP_CORE_SRC_APP_COMMON_APP_TRACE_H_
 
 /**
  * 通用打印函数，可以通过修改实现不同外设输出，参数列表同printf
@@ -17,6 +17,6 @@
  */
 extern int common_trace(const char *fmt, ...);
 
-void trace_init();
+void common_trace_init();
 
-#endif //INSCUBEBSP_CORE_SRC_APP_COMMON_TRACE_H_
+#endif //INSCUBEBSP_CORE_SRC_APP_COMMON_APP_TRACE_H_

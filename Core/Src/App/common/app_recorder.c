@@ -6,6 +6,7 @@
 * @version 1.0
 **/
 
+#include <stdio.h>
 #include "app_recorder.h"
 #include "fatfs.h"
 #include "string.h"
@@ -36,11 +37,15 @@ app_recorder_t *app_recorder_create(const char *filename) {
 		bsp_free(p);
 		return NULL;
 	}
-	size_t len = strlen(filename);
 /*	if(len > MAX_FILENAME_LEN){
 		len = MAX_FILENAME_LEN;
 	}*/
-	strcpy(p->filename, filename);
+    if(!filename){
+		char name[] = "LOG0.bin";
+		strcpy(p->filename, name);
+    }else{
+        strcpy(p->filename, filename);
+    }
 	return p;
 }
 

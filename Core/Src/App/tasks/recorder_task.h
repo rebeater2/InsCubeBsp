@@ -10,24 +10,13 @@
 #define INSCUBEBSP_CORE_SRC_APP_TASKS_RECORDER_TASK_H_
 #include "../../App/common/app_recorder.h"
 #include "../../Drivers/imu_adis1646x.h"
-typedef enum{
-  RECORDER_TYPE_IMU = 0,
-  RECORDER_TYPE_GNSS = 1,
-}recorder_data_type_t;
 
-typedef struct {
-  recorder_data_type_t type;
-  system_time_t tm;
-  union {
-	imu_raw_adi_t imu;
-	/*other sensor data*/
-  };
-}recorder_data_t;
 
 typedef struct {
   app_recorder_t *recorder;					/*define outside*/
-  QueueHandle_t recorder_queue;				/*message queue for different data*/
+  bsp_msg_t *recorder_queue;				/*message queue for different data*/
   void (*error_handler)(const char *msg); 	/*no return function when error occurred*/
+  int (*trace)(const char *fmt, ...);
 }recorder_task_para_t;
 
 /**

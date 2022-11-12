@@ -48,6 +48,15 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 include_directories(Core/RGIOE/Libs)
+include_directories(
+        Core/Src/Bsp
+        Core/Src/Drivers
+        Core/Src/App/tasks
+        Core/Src/App/common
+        Core/Src/App/algorithm
+
+        )
+
 include_directories(Core/Inc Core/RGIOE/Inc  FATFS/Target FATFS/App Drivers/STM32H7xx_HAL_Driver/Inc Drivers/STM32H7xx_HAL_Driver/Inc/Legacy Middlewares/Third_Party/FreeRTOS/Source/include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F Middlewares/Third_Party/FatFs/src Drivers/CMSIS/Device/ST/STM32H7xx/Include Drivers/CMSIS/Include)
 
 add_definitions(-DUSE_HAL_DRIVER -DSTM32H743xx)

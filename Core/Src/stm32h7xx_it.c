@@ -24,7 +24,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <cmsis_os.h>
-#include "IRQs/uart_handle.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -429,7 +428,7 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-  USER_UART_IRQHandler(&huart2);
+//  USER_UART_IRQHandler(&huart2);
   /* USER CODE END USART2_IRQn 1 */
 }
 
@@ -502,7 +501,7 @@ void UART4_IRQHandler(void)
   /* USER CODE END UART4_IRQn 0 */
   HAL_UART_IRQHandler(&huart4);
   /* USER CODE BEGIN UART4_IRQn 1 */
-  USER_UART_IRQHandler(&huart4);
+//  USER_UART_IRQHandler(&huart4);
 #if USE_STIM300 == 1
   uartForStim300Callback(&huart4);
 #endif
@@ -519,7 +518,7 @@ void UART5_IRQHandler(void)
   /* USER CODE END UART5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);
   /* USER CODE BEGIN UART5_IRQn 1 */
-  USER_UART_IRQHandler(&huart5);
+//  USER_UART_IRQHandler(&huart5);
   /* USER CODE END UART5_IRQn 1 */
 }
 
@@ -575,7 +574,7 @@ void USART6_IRQHandler(void)
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
-  USER_UART_IRQHandler(&huart6);
+//  USER_UART_IRQHandler(&huart6);
   /* USER CODE END USART6_IRQn 1 */
 }
 
