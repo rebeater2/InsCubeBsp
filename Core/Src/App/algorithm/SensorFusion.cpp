@@ -7,8 +7,29 @@
 **/
 
 
+#include <cstring>
 #include "SensorFusion.h"
-SensorFusionError_t fusion_init(){
+#ifdef MAHONY_6_AXIS
+#include "Mahony/MahonyAHRS.h"
+#endif
+#define MAX_FUSION_FREQ 2000
+#define MIN_FUSION_FREQ 1
+#define MIN_DELTA_T (1.0f/MAX_FUSION_FREQ)
+#define MAX_DELTA_T (1.0f/MIN_FUSION_FREQ)
+
+SensorFusionError_t fusion_init(FusionData_t *fd, const FusionOption_t *opt) {
+    memset(fd, 0, sizeof(FusionData_t));
+    fd->opt = *opt;
+#ifdef MAHONY_6_AXIS
+    float deltat = opt->delta_t;
+    if (deltat > MAX_DELTA_T) {
+        deltat = MAX_DELTA_T;
+    }
+    if (deltat < MIN_DELTA_T) {
+        deltat = MIN_DELTA_T;
+    }
+    MahonyAHRSInit(1, 0, 1.0f / deltat);
+#endif
     return SensorFusionOk;
 };
 /**
@@ -18,25 +39,28 @@ SensorFusionError_t fusion_init(){
  * @param sensor
  * @return
  */
-SensorFusionError_t fusion_update(double timestamp,const void *data, Sensor_t sensor){
+SensorFusionError_t fusion_update(FusionData_t *fd, const double timestamp, const void *data, Sensor_t sensor) {
+    fd->cur_timestamp = timestamp;
     switch (sensor) {
-        case SensorIMU:
-
+        case SensorIMU: {
+            fd->imu = *(ImuData_t *) data;
+#ifdef MAHONY_6_AXIS
+            MahonyAHRSupdateIMU(fd->imu.gyro[0], fd->imu.gyro[1], fd->imu.gyro[2],
+                                fd->imu.acce[0], fd->imu.acce[1], fd->imu.acce[2]
+            );
+            MahonyAHRSGetEuler(fd->atti);
+#endif
+        }
             break;
         case SensorGNSS:
-            /* TODO: */
+
             break;
         default:break;
     }
+    fd->pre_timestamp = fd->cur_timestamp;
     return SensorFusionOk;
 }
-SensorFusionError_t fusion_getstatus(FusionStatus_t *status) {
+SensorFusionError_t fusion_getstatus(FusionData_t *fd, FusionStatus_t *status) {
     *status = FusionStatusINS;
-    return SensorFusionOk;
-}
-SensorFusionError_t fusion_getpos(double timestamp, double pos[3]){
-    return SensorFusionOk;
-}
-SensorFusionError_t fusion_geteuler(double timestamp,float[3]){
     return SensorFusionOk;
 }

@@ -10,18 +10,14 @@
 #define INSCUBEBSP_CORE_SRC_APP_TASKS_FUSION_TASK_H_
 #include "bsp.h"
 #include "app_recorder.h"
+#include "SensorFusion.h"
 #define FUSION_PUSH_RESULT_FREQ 500
 #define FUSION_PUSH_STATUS_FREQ 1
 
-typedef struct {
-  float delta_t;
-  float acce_scale;
-  float gyro_scale;
 
-}fusion_option_t;
 
 typedef struct {
-  fusion_option_t *option;
+  FusionOption_t *option;
   void (*error_handler)(const char *);
   int (*trace)(const char *fmt, ...);           /* 打印函数*/
   bsp_msg_t *recorder_que;
