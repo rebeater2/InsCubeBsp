@@ -1,17 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include <memory.h>
 #include "rgb_led.h"
 #include "app_msgs.h"
@@ -109,6 +96,7 @@ _Noreturn void MainTask() {
     /*初始化日志任务*/
     recorder_task_para_t recorder_task_para = {
         .error_handler =error_handle,
+
         .recorder = NULL,
         .recorder_queue = &recorder_queue,
         .trace = common_trace,
@@ -132,7 +120,7 @@ _Noreturn void MainTask() {
     imu_irq_init(&imu_task_para);
 
     /** 初始化组合导航任务 */
-    fusion_option_t *opt = bsp_malloc(sizeof(fusion_option_t));
+    FusionOption_t *opt = bsp_malloc(sizeof(FusionOption_t));
     opt->delta_t = imu_task_para.adi_handle->deltat;
         opt->acce_scale = imu_task_para.adi_handle->attrib->acce_scale;
         opt->gyro_scale = imu_task_para.adi_handle->attrib->gyro_scale;

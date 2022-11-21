@@ -16,6 +16,19 @@ extern "C" {
 #include <stdint.h>
 #endif
 
+#ifdef MAHONY_6_AXIS
+
+#endif
+
+typedef struct {
+  float delta_t;
+  float acce_scale;
+  float gyro_scale;
+
+} FusionOption_t;
+
+
+
 typedef enum {
   SensorFusionOk = 0,
 } SensorFusionError_t;
@@ -45,7 +58,24 @@ typedef struct {
   float gyro[3];
 } ImuData_t;
 
-SensorFusionError_t fusion_init();
+typedef struct {
+  /* options*/
+  FusionOption_t opt;
+  double cur_timestamp;
+  double pre_timestamp;
+  double latlng[2];
+  float height;
+  float pos_std[3];
+  float atti[3];
+  float atti_std[3];
+
+  /*sensor data*/
+  ImuData_t imu;
+  GNSSData_t gnss;
+} FusionData_t;
+
+
+SensorFusionError_t fusion_init(FusionData_t *fd, const FusionOption_t *opt);
 /**
  *
  * @param timestamp
@@ -53,10 +83,8 @@ SensorFusionError_t fusion_init();
  * @param sensor
  * @return
  */
-SensorFusionError_t fusion_update(double timestamp, const void *data, Sensor_t sensor);
-SensorFusionError_t fusion_getpos(double timestamp, double pos[3],float std[3]);
-SensorFusionError_t fusion_geteuler(double timestamp, float[3],float std[3]);
-SensorFusionError_t fusion_getstatus(FusionStatus_t *status);
+SensorFusionError_t fusion_update(FusionData_t *fd, double timestamp, const void *data, Sensor_t sensor);
+SensorFusionError_t fusion_getstatus(FusionData_t *fd, FusionStatus_t *status);
 
 #ifdef __cplusplus
 }
