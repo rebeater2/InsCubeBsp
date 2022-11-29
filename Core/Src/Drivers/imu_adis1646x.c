@@ -200,7 +200,7 @@ adis1646x_handle_t *imu_handle_create() {
     handle->dev = spi5_dev;
     handle->delay_ms = bsp_delay_ms;
     handle->data_ready_pin = ADI_INT_Pin;
-    handle->rate_div = 0x1;
+    handle->rate_div = 0xf;
     handle->attrib = NULL;
     return handle;
 }

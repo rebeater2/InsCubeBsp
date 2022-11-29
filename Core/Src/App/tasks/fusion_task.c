@@ -7,6 +7,8 @@
 **/
 
 
+#include <stdio.h>
+#include <string.h>
 #include "fusion_task.h"
 #include "app_msgs.h"
 #include "app_recorder.h"
@@ -16,20 +18,21 @@
 
 #define FUSION_TASK_MSG_DELAY 0xFFFFu
 
+#pragma pack(8)
 typedef struct {
   uint32_t header;
   uint32_t length;
-  uint32_t id;
   double tm;
-  float acce[3];
-  float gyro[3];
   double lat;
   double lon;
+  uint32_t id;
+  float acce[3];
+  float gyro[3];
   float height;
   float atti[3];
   uint32_t check_sum;
 } output_data_t;
-
+#pragma unpack()
 static void fusion_push_out(FusionData_t *fd) {
     output_data_t out;
     out.header = 0xAA55AA55L;
@@ -49,7 +52,17 @@ static void fusion_push_out(FusionData_t *fd) {
         *p = (check_sum >> (8 * (3 - i))) & 0xff;
         p++;
     }
+  /*  out.check_sum = check_sum;*/
+/*    char buff[512];
+    sprintf(buff,"%d %d %d %d\n",
+            (int)out.tm,
+            (int)(out.atti[0] * 180.0f/3.1415f),
+            (int)(out.atti[1] * 180.0f/3.1415f),
+            (int)(out.atti[2] * 180.0f/3.1415f)
+            );*/
+//    dev_write(&uart1_dev, (uint8_t *) &buff, strlen(buff));
     dev_write(&uart1_dev, (uint8_t *) &out, sizeof(out));
+
 }
 static void fusion_task_save_imu(fusion_task_para_t *task, imu_msg_t *imu_msg) {
     recorder_data_t recorder_data = {
@@ -58,7 +71,7 @@ static void fusion_task_save_imu(fusion_task_para_t *task, imu_msg_t *imu_msg) {
         .tm = imu_msg->tm
     };
     if (bsp_msg_send(task->recorder_que, &recorder_data) != bsp_os_ok) {
-        task->trace("%s: recorder is full\n", pcTaskGetTaskName(NULL));
+//        task->trace("%s: recorder is full\n", pcTaskGetTaskName(NULL));
     }
 }
 inline void msg_to_imu(imu_msg_t *msg, ImuData_t *imu_data, FusionOption_t *opt) {
@@ -73,6 +86,7 @@ _Noreturn void fusion_task(void *para) {
     fusion_task_para_t *task = para;
     task->trace("%s: started\n", task_name);
     task->trace("%s: frame size %d\n", task_name, sizeof(output_data_t));
+    task->trace("%s: sample rate %d\n", task_name, (int)(1.0f/task->option->delta_t));
 
     system_time_t tm_push_result = {0, 0};
     system_time_t tm_push_status = {0, 0};

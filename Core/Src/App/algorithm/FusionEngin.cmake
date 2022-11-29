@@ -7,6 +7,9 @@ option(MAHONY "Set to build with mahony algorithm" OFF)
 if(DEFINED FUSION_ENGIN)
     set(CMAKE_FUSION_ENGIN ${FUSION_ENGIN})
     message("The fusion algorithm is ${CMAKE_FUSION_ENGIN}")
+else()
+    set(CMAKE_FUSION_ENGIN ${FUSION_ENGIN})
+    message("The fusion algorithm is not set,use default ${CMAKE_FUSION_ENGIN}")
 endif()
 
 

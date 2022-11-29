@@ -21,6 +21,8 @@ SensorFusionError_t fusion_init(FusionData_t *fd, const FusionOption_t *opt) {
     memset(fd, 0, sizeof(FusionData_t));
     fd->opt = *opt;
 #ifdef MAHONY_6_AXIS
+    fd->latlng[0] =1.0f;
+    fd->latlng[1] =0.123f;
     float deltat = opt->delta_t;
     if (deltat > MAX_DELTA_T) {
         deltat = MAX_DELTA_T;
